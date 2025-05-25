@@ -1,7 +1,5 @@
 node_modules
 .env
 .idea
-src/services
-cypress
 README.md
 dist
