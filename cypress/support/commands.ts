@@ -47,12 +47,12 @@ declare global {
 }
 
 // Custom commands for drag and drop functionality
-Cypress.Commands.add('drag', { prevSubject: 'element' }, (subject) => {
-  return cy.wrap(subject).trigger('dragstart', { force: true });
+Cypress.Commands.add('drag', { prevSubject: ['element'] }, (subject) => {
+  cy.wrap(subject.get(0)).trigger('dragstart', { force: true });
 });
 
-Cypress.Commands.add('drop', { prevSubject: 'element' }, (subject) => {
-  return cy.wrap(subject).trigger('drop', { force: true });
+Cypress.Commands.add('drop', { prevSubject: ['element'] }, (subject) => {
+  cy.wrap(subject.get(0)).trigger('drop', { force: true });
 });
 
 // Add custom command for login
