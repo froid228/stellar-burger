@@ -61,18 +61,22 @@ export const constructorSlice = createSlice({
         );
     },
     moveIngredientUp: (state, action: PayloadAction<number>) => {
-      state.constructorItems.ingredients.splice(
-        action.payload,
-        0,
-        state.constructorItems.ingredients.splice(action.payload - 1, 1)[0]
-      );
+      const index = action.payload;
+      if (index > 0) {
+        const item = state.constructorItems.ingredients[index];
+        state.constructorItems.ingredients[index] =
+          state.constructorItems.ingredients[index - 1];
+        state.constructorItems.ingredients[index - 1] = item;
+      }
     },
     moveIngredientDown: (state, action: PayloadAction<number>) => {
-      state.constructorItems.ingredients.splice(
-        action.payload,
-        0,
-        state.constructorItems.ingredients.splice(action.payload + 1, 1)[0]
-      );
+      const index = action.payload;
+      if (index < state.constructorItems.ingredients.length - 1) {
+        const item = state.constructorItems.ingredients[index];
+        state.constructorItems.ingredients[index] =
+          state.constructorItems.ingredients[index + 1];
+        state.constructorItems.ingredients[index + 1] = item;
+      }
     },
     setRequest: (state, action) => {
       state.orderRequest = action.payload;

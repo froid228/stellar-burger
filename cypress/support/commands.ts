@@ -39,30 +39,28 @@
 declare global {
   namespace Cypress {
     interface Chainable {
-      drag(target: string): Chainable<Element>
-      login(email: string, password: string): Chainable<Element>
+      drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+      drop(target: string): Chainable<Element>
+      login(email: string, password: string): Chainable<void>
     }
   }
 }
 
 // Custom commands for drag and drop functionality
-Cypress.Commands.add('drag', { prevSubject: 'element' }, (subject, target) => {
-  const targetElement = Cypress.$(target);
-  const targetRect = targetElement[0].getBoundingClientRect();
-  
-  cy.wrap(subject)
-    .trigger('mousedown', { which: 1 })
-    .trigger('mousemove', {
-      clientX: targetRect.left + targetRect.width / 2,
-      clientY: targetRect.top + targetRect.height / 2
-    })
-    .trigger('mouseup');
+Cypress.Commands.add('drag', { prevSubject: 'element' }, (subject) => {
+  return cy.wrap(subject).trigger('dragstart', { force: true });
+});
+
+Cypress.Commands.add('drop', { prevSubject: 'element' }, (subject) => {
+  return cy.wrap(subject).trigger('drop', { force: true });
 });
 
 // Add custom command for login
 Cypress.Commands.add('login', (email: string, password: string) => {
-  cy.get('[data-testid="login-button"]').click();
-  cy.get('[data-testid="email-input"]').type(email);
-  cy.get('[data-testid="password-input"]').type(password);
-  cy.get('[data-testid="login-submit"]').click();
+  cy.visit('/login');
+  cy.get('input[name="email"]').type(email);
+  cy.get('input[name="password"]').type(password);
+  cy.get('button[type="submit"]').click();
 });
+
+export {};
